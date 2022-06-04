@@ -50,3 +50,19 @@ First, we need to declare a couple of macros. Those macros need to be included i
 The goal of macro `TEMPLATE(X,Y)` is to have a keyword that enables us to concatenate X and Y with an underscore in between, like this: `X_Y`, so that writing `TEMPLATE(function,type)` may translate to `function_type`.
 <br>
 The `##` operator is a C preprocessor directive which allows to concatenate two tokens. The reason we can't use only a single `#define TEMPLATE(X,Y) X##Y` macro is that if X is itself a #def'd constant, it will not be replaced by its value (the details of this question and the details behind the hack to make it work anyway may be found here (self-referential macros) and here (argument prescan)).
+
+#### Ingredient 2: the functions to "templatize"
+Ok, so now we want to write a .c and a .h corresponding to the functions we'd like to have as templates, right? Let's write them. To denote the variable type keyword, we use letter 'T'. This will be #defined later on in the tutorial.
+<br>
+First the .h:
+#### sum_as_template.h:
+```c
+#ifdef T
+
+#include "templates.h"
+
+void TEMPLATE(sum,T)(int n, T *a, T *b);
+
+#endif
+```
+Notice we don't guard the .h against multiple inclusion by using the standard `#ifndef HEADER_H_` stuff. This is intentional. We'll see later why. On the other hand, the `#ifdef T` test is optional, but very useful to guard against any unlawful inclusion in the case T isn't defined, so the compiler doesn't throw a fit and starts hissing at you.
