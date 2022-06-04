@@ -9,22 +9,25 @@ Imagine you have to write a set of functions in C, which differ only by a few ke
 void sum_float(int n, float *a, float *b)
 {
 	/* computes a:=a+b where a and b are two arrays of length n */
-	int i;
-	for(i=0;i<n;i++) a[i]+=b[i];
+	for(int i = 0; i < n; ++i) {
+		a[i] += b[i];
+	}
 }
 
 void sum_double(int n, double *a, double *b)
 {
 	/* computes a:=a+b where a and b are two arrays of length n */
-	int i;
-	for(i=0;i<n;i++) a[i]+=b[i];
+	for(int i = 0; i < n; ++i) {
+		a[i] += b[i];
+	}
 }
 
 void sum_int(int n, int *a, int *b)
 {
 	/* computes a:=a+b where a and b are two arrays of length n */
-	int i;
-	for(i=0;i<n;i++) a[i]+=b[i];
+	for(int i = 0; i < n; ++i) {
+		a[i] += b[i];
+	}
 }
 ```
 <br>
@@ -61,18 +64,26 @@ Ok, so now we want to write a .c and a .h corresponding to the functions we'd li
 First the .h:
 #### sum_as_template.h:
 ```c
-#ifdef T
+#ifndef T
+    #error T should be defined
+#else
+
 #include "templates.h"
 
-void TEMPLATE(sum,T)(int n, T *a, T *b);
-#endif
+void TEMPLATE(sum,T) (int n, T *a, T *b);
+
+#undef T
+
+#endif /* T */
 ```
 Notice we don't guard the .h against multiple inclusion by using the standard `#ifndef HEADER_H_` stuff. This is intentional. We'll see later why. On the other hand, the `#ifdef T` test is optional, but very useful to guard against any unlawful inclusion in the case T isn't defined, so the compiler doesn't throw a fit and starts hissing at you.
 <br>
 And now the .c:
 #### sum_as_template.c:
 ```c
-#ifdef T
+#ifndef T
+    #error T should be defined
+#else
 
 #include "templates.h"
 
@@ -84,7 +95,9 @@ void TEMPLATE(sum,T) (int n, T *a, T *b)
     }
 }
 
-#endif
+#undef T
+
+#endif /* T */
 ```
 
 #### Mix everything in a bowl...
@@ -102,16 +115,8 @@ The following .c file is the one we will compile just as another .c in the proje
 #define T float
 #include "sum_as_template.c"
 
-#ifdef T
-    #undef T
-#endif
-
 #define T double
 #include "sum_as_template.c"
-
-#ifdef T
-    #undef T
-#endif
 
 #define T int
 #include "sum_as_template.c"
@@ -131,16 +136,8 @@ The following .h is the one we'll include in any .c where a variant of the `sum_
 #define T float
 #include "sum_as_template.h"
 
-#ifdef T
-    #undef T
-#endif
-
 #define T double
 #include "sum_as_template.h"
-
-#ifdef T
-    #undef T
-#endif
 
 #define T int
 #include "sum_as_template.h"

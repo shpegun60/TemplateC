@@ -8,4 +8,4 @@ void TEMPLATE(sum,T) (int n, T *a, T *b);
 
 #undef T
 
-#endif
+#endif /* T */
