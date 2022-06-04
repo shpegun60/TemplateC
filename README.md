@@ -146,4 +146,6 @@ The following .h is the one we'll include in any .c where a variant of the `sum_
 #define T int
 #include "sum_as_template.h"
 
+#endif /*ALL_POSSIBLE_SUMS_H_*/
+
 ```
