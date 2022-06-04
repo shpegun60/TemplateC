@@ -118,3 +118,32 @@ The following .c file is the one we will compile just as another .c in the proje
 `Note:` on GCC, #undef T would have been enough without the `#ifdef T` / `#endif` around it; but Visual C++ (at least up to version 7) does not like it...
 <br>
 The following .h is the one we'll include in any .c where a variant of the `sum_...` function is used.
+#### all_possible_sums.h
+```c
+#ifndef ALL_POSSIBLE_SUMS_H_ 
+#define ALL_POSSIBLE_SUMS_H_ 
+
+#include "templates.h"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T float
+#include "sum_as_template.h"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T double
+#include "sum_as_template.h"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T int
+#include "sum_as_template.h"
+
+```
