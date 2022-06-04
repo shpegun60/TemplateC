@@ -1,4 +1,6 @@
-#ifdef T
+#ifndef T
+    #error T should be defined
+#else
 
 #include "templates.h"
 
@@ -9,5 +11,7 @@ void TEMPLATE(sum,T) (int n, T *a, T *b)
         a[i] += b[i];
     }
 }
+
+#undef T
 
 #endif
