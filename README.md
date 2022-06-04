@@ -85,3 +85,32 @@ int TEMPLATE(sum,T) (int n, T *a, T *b)
 ```
 
 #### Mix everything in a bowl...
+Now we really want to instanciate the sum function so that all its variants exist (sum_float, sum_double, etc). We create another set of .h and .c files:
+<br>
+The following .c file is the one we will compile just as another .c in the project:
+#### all_possible_sums.c
+```c
+#include "templates.h"
+#include "all_possible_sums.h"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T float
+#include "sum_as_template.c"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T double
+#include "sum_as_template.c"
+
+#ifdef T
+	#undef T
+#endif
+
+#define T int
+#include "sum_as_template.c"
+```
