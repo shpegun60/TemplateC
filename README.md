@@ -66,3 +66,20 @@ void TEMPLATE(sum,T)(int n, T *a, T *b);
 #endif
 ```
 Notice we don't guard the .h against multiple inclusion by using the standard `#ifndef HEADER_H_` stuff. This is intentional. We'll see later why. On the other hand, the `#ifdef T` test is optional, but very useful to guard against any unlawful inclusion in the case T isn't defined, so the compiler doesn't throw a fit and starts hissing at you.
+<br>
+And now the .c:
+#### sum_as_template.c:
+```c
+#ifdef T
+
+#include "templates.h"
+
+int TEMPLATE(sum,T) (int n, T *a, T *b)
+{
+	/* computes a:=a+b where a and b are two arrays of length n */
+	int i;
+	for(i=0;i<n;i++) a[i]+=b[i];
+}
+
+#endif
+```
