@@ -115,7 +115,7 @@ The following .c file is the one we will compile just as another .c in the proje
 #define T int
 #include "sum_as_template.c"
 ```
-`Note:` on GCC, #undef T would have been enough without the `#ifdef T` / `#endif` around it; but Visual C++ (at least up to version 7) does not like it...
+`Note:` on GCC, `#undef T` would have been enough without the `#ifdef T` / `#endif` around it; but Visual C++ (at least up to version 7) does not like it...
 <br>
 The following .h is the one we'll include in any .c where a variant of the `sum_...` function is used.
 #### all_possible_sums.h
@@ -149,3 +149,23 @@ The following .h is the one we'll include in any .c where a variant of the `sum_
 #endif /*ALL_POSSIBLE_SUMS_H_*/
 
 ```
+This time we understand why we didn't guard sum_as_template.h against multiple inclusions: it is included once per type...
+
+#### ...and serve as it is!
+We're all set now! Let's use the templates in an example:
+#### main.c:
+```c
+#include "all_possible_sums.h"
+
+int main(int argc, char **argv)
+{
+	int ai[3] = {1,2,3};
+	int bi[3] = {4,5,6};
+	float af[3] = {1.0,2.0,3.0};
+	float bf[3] = {1.5,2.5,3.5};
+	TEMPLATE(sum,int)(3,ai,bi);
+	TEMPLATE(sum,float)(3,af,bf);
+	return 0;
+}
+```
+That's all, folks!
