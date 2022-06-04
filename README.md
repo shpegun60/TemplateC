@@ -1,12 +1,16 @@
 ## About:
-This project for try template implementation on C, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC with some errors removed and some edits added.
+This project for try template implementation on C, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC 
+<br>
+some errors removed and some edits added ==>
 
 #### sum_as_template.c, .h:
 ```c
 #ifndef T
-#error T should be defined
+	#error T should be defined
 #else
-…
+
+...
+
 #undef T
 #endif
 ```
