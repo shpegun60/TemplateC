@@ -43,17 +43,17 @@ Here's a technique to emulate the use of templates in C. It only uses the standa
 First, we need to declare a couple of macros. Those macros need to be included in every file that makes use of templates. To make things easier we will declare them in a .h file called "templates.h":
 #### templates.h:
 ```c
-#ifndef TEMPLATES_H_
-#define TEMPLATES_H_
+#ifndef __TEMPLATES_C_LANG_H_
+#define __TEMPLATES_C_LANG_H_
 
 #define CAT(X,Y) X##_##Y
 #define TEMPLATE(X,Y) CAT(X,Y)
 
-#endif
+#endif /*__TEMPLATES_C_LANG_H_*/
 ```
 The goal of macro `TEMPLATE(X,Y)` is to have a keyword that enables us to concatenate X and Y with an underscore in between, like this: `X_Y`, so that writing `TEMPLATE(function,type)` may translate to `function_type`.
 <br>
-The `##` operator is a C preprocessor directive which allows to concatenate two tokens. The reason we can't use only a single `#define TEMPLATE(X,Y) X##Y` macro is that if X is itself a #def'd constant, it will not be replaced by its value (the details of this question and the details behind the hack to make it work anyway may be found here (self-referential macros) and here (argument prescan)).
+The `##` operator is a C preprocessor directive which allows to concatenate two tokens. The reason we can't use only a single `#define TEMPLATE(X,Y) X##Y` macro is that if X is itself a macro constant, it will not be replaced by its value (the details of this question and the details behind the hack to make it work anyway may be found here (self-referential macros) and here (argument prescan)).
 
 #### Ingredient 2: the functions to "templatize"
 Ok, so now we want to write a .c and a .h corresponding to the functions we'd like to have as templates, right? Let's write them. To denote the variable type keyword, we use letter 'T'. This will be #defined later on in the tutorial.
@@ -62,11 +62,9 @@ First the .h:
 #### sum_as_template.h:
 ```c
 #ifdef T
-
 #include "templates.h"
 
 void TEMPLATE(sum,T)(int n, T *a, T *b);
-
 #endif
 ```
 Notice we don't guard the .h against multiple inclusion by using the standard `#ifndef HEADER_H_` stuff. This is intentional. We'll see later why. On the other hand, the `#ifdef T` test is optional, but very useful to guard against any unlawful inclusion in the case T isn't defined, so the compiler doesn't throw a fit and starts hissing at you.
@@ -78,11 +76,12 @@ And now the .c:
 
 #include "templates.h"
 
-int TEMPLATE(sum,T) (int n, T *a, T *b)
+void TEMPLATE(sum,T) (int n, T *a, T *b)
 {
-	/* computes a:=a+b where a and b are two arrays of length n */
-	int i;
-	for(i=0;i<n;i++) a[i]+=b[i];
+    /* computes a:=a+b where a and b are two arrays of length n */
+    for(int i = 0; i < n; ++i) {
+        a[i] += b[i];
+    }
 }
 
 #endif
@@ -94,25 +93,24 @@ Now we really want to instanciate the `sum` function so that all its variants ex
 The following .c file is the one we will compile just as another .c in the project:
 #### all_possible_sums.c
 ```c
-#include "templates.h"
 #include "all_possible_sums.h"
 
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T float
 #include "sum_as_template.c"
 
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T double
 #include "sum_as_template.c"
 
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T int
@@ -126,31 +124,29 @@ The following .h is the one we'll include in any .c where a variant of the `sum_
 #ifndef ALL_POSSIBLE_SUMS_H_ 
 #define ALL_POSSIBLE_SUMS_H_ 
 
-#include "templates.h"
-
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T float
 #include "sum_as_template.h"
 
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T double
 #include "sum_as_template.h"
 
 #ifdef T
-	#undef T
+    #undef T
 #endif
 
 #define T int
 #include "sum_as_template.h"
 
-#endif /*ALL_POSSIBLE_SUMS_H_*/
 
+#endif /*ALL_POSSIBLE_SUMS_H_*/
 ```
 This time we understand why we didn't guard sum_as_template.h against multiple inclusions: it is included once per type...
 

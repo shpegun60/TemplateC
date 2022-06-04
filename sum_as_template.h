@@ -1,5 +1,5 @@
 #ifdef T
-    #include "templates.h"
+#include "templates.h"
 
-    void TEMPLATE(sum,T)(int n, T *a, T *b);
+void TEMPLATE(sum,T)(int n, T *a, T *b);
 #endif
