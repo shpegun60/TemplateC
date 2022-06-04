@@ -1,5 +1,43 @@
 ## About:
-This project for try template implementation in c, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC
+This project for try template implementation on C, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC with some errors removed and some edits added.
+
+#### sum_as_template.c, .h:
+```c
+#ifndef T
+#error T should be defined
+#else
+…
+#undef T
+#endif
+```
+<br>
+In this wording:
+<br>
+1. We get a readable error if T is not declared
+<br>
+2. At the beginning of the file, you can immediately see what needs to be declared
+<br>
+3. Connecting this whole thing will be simplified:
+<br>
+
+#### all_possible_sums.c, .h:
+```c
+// just in case
+#ifdef T
+	#undef T
+#endif
+
+#define T float
+#include "sum_as_template.h"
+
+// and here we know that undef is done
+
+#define T double
+#include "sum_as_template.h"
+
+#define T int
+#include "sum_as_template.h"
+```
 
 ## Templates in C (yes! plain C! Not C++!)
 
