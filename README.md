@@ -40,6 +40,7 @@ Ingredient 1: a concatenation macro
 First, we need to declare a couple of macros. Those macros need to be included in every file that makes use of templates. To make things easier we will declare them in a .h file called "templates.h":
 
 ####templates.h
+
 ```c
 #ifndef TEMPLATES_H_
 #define TEMPLATES_H_
