@@ -169,3 +169,12 @@ int main(int argc, char **argv)
 }
 ```
 That's all, folks!
+
+## The last word
+What about complex types, you may ask? What if I want to make a template where "T" is to be replaced by, say, "unsigned long long"? Wouldn't the compiler complain that it does not know about `void sum_unsigned long long()`?
+<br>
+The answer is yes, but there's a workaround: typedef the offending, "multi-worded" type into a "single-worded" type, like this:
+<br>
+`typedef unsigned long long uint64;`
+<br>
+Then use `TEMPLATE(sum,uint64)` instead of `TEMPLATE(sum,unsigned long long)`. Voilà!
