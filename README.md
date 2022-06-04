@@ -1,5 +1,5 @@
 ## About:
-his project for try template implementation in c, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC
+This project for try template implementation in c, original article: http://arnold.uthar.net/index.php?n=Work.TemplatesC
 
 ## Templates in C (yes! plain C! Not C++!)
 
