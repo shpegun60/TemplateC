@@ -31,7 +31,7 @@ This is what templates do. In C++ there is a template keyword that allows to do 
 <br>
 Here's a technique to emulate the use of templates in C. It only uses the standard C preprocessor and it is, as far as I know, ANSI C89-compliant. And it works in C++, too. It is also very useful for OpenCL, which has a fully working pre-processor but no templates.
 <br>
-Note: Over the year, this simple blog post has been cited in many places, translated into Russian, quoted on Greek, Chinese, Finnish forums. Wow! I was contacted and asked whether I "discovered' this technique. No, I do not claim to have invented this trick, because I saw it while digging in code. However, I have found that it is not widely known despite its obvious usefulness, hence the tutorial.
+`Note:` Over the year, this simple blog post has been cited in many places, translated into Russian, quoted on Greek, Chinese, Finnish forums. Wow! I was contacted and asked whether I "discovered' this technique. No, I do not claim to have invented this trick, because I saw it while digging in code. However, I have found that it is not widely known despite its obvious usefulness, hence the tutorial.
 
 ## Templates in C
 
@@ -85,7 +85,7 @@ int TEMPLATE(sum,T) (int n, T *a, T *b)
 ```
 
 #### Mix everything in a bowl...
-Now we really want to instanciate the sum function so that all its variants exist (sum_float, sum_double, etc). We create another set of .h and .c files:
+Now we really want to instanciate the `sum` function so that all its variants exist (`sum_float`, `sum_double`, etc). We create another set of .h and .c files:
 <br>
 The following .c file is the one we will compile just as another .c in the project:
 #### all_possible_sums.c
@@ -114,3 +114,6 @@ The following .c file is the one we will compile just as another .c in the proje
 #define T int
 #include "sum_as_template.c"
 ```
+`Note:` on GCC, #undef T would have been enough without the `#ifdef T` / `#endif` around it; but Visual C++ (at least up to version 7) does not like it...
+<br>
+The following .h is the one we'll include in any .c where a variant of the `sum_...` function is used.
